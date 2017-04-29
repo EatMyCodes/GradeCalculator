@@ -1,0 +1,226 @@
+public class DBHelper extends SQLiteOpenHelper {
+
+    public static final String DATABASE_NAME = "GradingSys.db";
+    public static final String GRADE_TABLE_NAME = "grading";
+    public static final String GRADE_ID = "id";
+    public static final String GRADE_SUBJECT_NAME = "subject";
+    public static final String GRADE_PASSING = "passing";
+    public static final String GRADE_EXAMINATION = "examination";
+    public static final String GRADE_QUIZ = "quiz";
+    public static final String GRADE_SEATWORK = "seatwork";
+    public static final String GRADE_HOMEWORK = "homework";
+    public static final String GRADE_PROJECT = "project";
+    public static final String GRADE_RECITATION = "recitation";
+    public static final String GRADE_LABACT = "labAct";
+    public static final String GRADE_LABEX = "labEx";
+    private HashMap hp;
+
+
+
+    //FOR GRADE RECORDS
+    public static final String RECORD_TABLE = "record";
+    public static final String RECORD_ID = "id";
+    public static final String RECORD_SUBJECT = "subject";
+    public static final String RECORD_CATEGORY = "category";
+    public static final String RECORD_SCORE = "score";
+
+    /*
+
+        CATEGORIES OF RECORDS
+            >examination
+            >quiz
+            >seatwork
+            >homework
+            >project
+            >recitation
+            >labAct
+            >labEx
+     */
+
+    public DBHelper(Context context)
+    {
+        super(context, DATABASE_NAME , null, 1);
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // TODO Auto-generated method stub
+        db.execSQL(
+                "create table " + GRADE_TABLE_NAME  +
+                        "(" + GRADE_ID +" integer primary key, " + GRADE_SUBJECT_NAME +" text NOT NULL UNIQUE," + GRADE_PASSING +" integer," +
+                        GRADE_EXAMINATION +" integer," + GRADE_QUIZ +" integer, " + GRADE_SEATWORK +" integer," + GRADE_HOMEWORK +" integer," +
+                        GRADE_PROJECT +" integer, " + GRADE_RECITATION +" integer, " + GRADE_LABACT +" integer, " + GRADE_LABEX +" integer)"
+        );
+        db.execSQL("" +
+                "create table " + RECORD_TABLE  +
+                "(" + RECORD_ID +" integer primary key, " + RECORD_SUBJECT +" text NOT NULL, " + RECORD_CATEGORY +" text NOT NULL, " + RECORD_SCORE +" text NOT NULL)");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // TODO Auto-generated method stub
+        db.execSQL("DROP TABLE IF EXISTS " + GRADE_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + RECORD_TABLE );
+        onCreate(db);
+    }
+
+    public boolean insertContact  (String subject, int passing, int examination, int quiz, int seatwork,int homework, int project, int recitation, int labAct, int labEx )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GRADE_SUBJECT_NAME, subject);
+        contentValues.put(GRADE_PASSING, passing);
+        contentValues.put(GRADE_EXAMINATION, examination);
+        contentValues.put(GRADE_QUIZ, quiz);
+        contentValues.put(GRADE_SEATWORK, seatwork);
+        contentValues.put(GRADE_HOMEWORK, homework);
+        contentValues.put(GRADE_PROJECT, project);
+        contentValues.put(GRADE_RECITATION, recitation);
+        contentValues.put(GRADE_LABACT, labAct);
+        contentValues.put(GRADE_LABEX, labEx);
+        db.insert(GRADE_TABLE_NAME, null, contentValues);
+        return true;
+    }
+
+    public Cursor getData(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + GRADE_TABLE_NAME +" where " + GRADE_ID +"="+id+"", null );
+        return res;
+    }
+
+    public int numberOfRows(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, GRADE_TABLE_NAME);
+        return numRows;
+    }
+
+    public boolean updateGrade(String subject, int passing,int examination, int quiz, int seatwork, int homework, int project, int recitation, int labAct, int labEx )
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(GRADE_SUBJECT_NAME, subject);
+        contentValues.put(GRADE_PASSING, passing);
+        contentValues.put(GRADE_EXAMINATION, examination);
+        contentValues.put(GRADE_QUIZ, quiz);
+        contentValues.put(GRADE_SEATWORK, seatwork);
+        contentValues.put(GRADE_HOMEWORK, homework);
+        contentValues.put(GRADE_PROJECT, project);
+        contentValues.put(GRADE_RECITATION, recitation);
+        contentValues.put(GRADE_LABACT, labAct);
+        contentValues.put(GRADE_LABEX, labEx);
+        db.update(GRADE_TABLE_NAME, contentValues, GRADE_SUBJECT_NAME+" = ? ", new String[] { subject } );
+        return true;
+    }
+
+    public Integer deleteGrade(String subject)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(GRADE_TABLE_NAME,
+                GRADE_SUBJECT_NAME +" = ? ",
+                new String[] { subject });
+    }
+
+    public ArrayList<String> getAllGrades()
+    {
+        ArrayList<String> array_list = new ArrayList<String>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from "+GRADE_TABLE_NAME, null );
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+            array_list.add(res.getString(res.getColumnIndex(GRADE_SUBJECT_NAME)));
+            res.moveToNext();
+        }
+        return array_list;
+    }
+
+    public int[] getGrade(String subject){
+        int array[] = new int[8];
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "Select * from "+GRADE_TABLE_NAME+" where "+GRADE_SUBJECT_NAME+" = '" + subject + "'";
+        Cursor res = db.rawQuery(sql,null);
+        res.moveToFirst();
+        array[0] = res.getInt(res.getColumnIndex(GRADE_EXAMINATION));
+        array[1] = res.getInt(res.getColumnIndex(GRADE_QUIZ));
+        array[2] = res.getInt(res.getColumnIndex(GRADE_SEATWORK));
+        array[3] = res.getInt(res.getColumnIndex(GRADE_HOMEWORK));
+        array[4] = res.getInt(res.getColumnIndex(GRADE_PROJECT));
+        array[5] = res.getInt(res.getColumnIndex(GRADE_RECITATION));
+        array[6] = res.getInt(res.getColumnIndex(GRADE_LABACT));
+        array[7] = res.getInt(res.getColumnIndex(GRADE_LABEX));
+
+        return array;
+    }
+
+    public int getPassing(String subject){
+        int passing = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "Select passing from "+GRADE_TABLE_NAME+" where "+GRADE_SUBJECT_NAME+" = '" + subject + "'";
+        Cursor res = db.rawQuery(sql,null);
+        res.moveToFirst();
+        passing = res.getInt(res.getColumnIndex(GRADE_PASSING));
+        return passing;
+    }
+
+    public GradesModel getSubjGrade(String subject){
+
+        GradesModel gradesModel = new GradesModel();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "Select * from "+GRADE_TABLE_NAME+" where "+GRADE_SUBJECT_NAME+" = '" + subject + "'";
+        Cursor res = db.rawQuery(sql,null);
+        res.moveToFirst();
+
+        gradesModel.setSubject(res.getString(res.getColumnIndex(GRADE_SUBJECT_NAME)));
+        gradesModel.setPassing(res.getInt(res.getColumnIndex(GRADE_PASSING)));
+        gradesModel.setExamination(res.getInt(res.getColumnIndex(GRADE_EXAMINATION)));
+        gradesModel.setQuiz(res.getInt(res.getColumnIndex(GRADE_QUIZ)));
+        gradesModel.setSeatwork(res.getInt(res.getColumnIndex(GRADE_SEATWORK)));
+        gradesModel.setHomework(res.getInt(res.getColumnIndex(GRADE_HOMEWORK)));
+        gradesModel.setProject(res.getInt(res.getColumnIndex(GRADE_PROJECT)));
+        gradesModel.setRecitation(res.getInt(res.getColumnIndex(GRADE_RECITATION)));
+        gradesModel.setLabAct(res.getInt(res.getColumnIndex(GRADE_LABACT)));
+        gradesModel.setLabEx(res.getInt(res.getColumnIndex(GRADE_LABEX)));
+
+
+        return gradesModel;
+    }
+
+
+    public boolean insertGradeRecord(String subject,String category,String score){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(RECORD_SUBJECT, subject);
+        contentValues.put(RECORD_CATEGORY, category);
+        contentValues.put(RECORD_SCORE, score);
+        db.insert(RECORD_TABLE, null, contentValues);
+        return true;
+
+    }
+
+    public ArrayList<GradeRecordsModel> getGradeRecords(String subjName){
+        ArrayList<GradeRecordsModel> arr_records = new ArrayList<>();
+        GradeRecordsModel record;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String sql = "Select * from "+RECORD_TABLE + " where " + RECORD_SUBJECT+"='"+subjName+"'";
+        Cursor res = db.rawQuery(sql,null);
+
+        res.moveToFirst();
+
+
+
+        while(res.moveToNext()){
+            record = new GradeRecordsModel();
+            record.setSubject(res.getString(res.getColumnIndex(RECORD_SUBJECT)));
+            record.setCategory(res.getString(res.getColumnIndex(RECORD_CATEGORY)));
+            record.setRecord(res.getString(res.getColumnIndex(RECORD_SCORE)));
+            arr_records.add(record);
+        }
+        return arr_records;
+
+    }
+}

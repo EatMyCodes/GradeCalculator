@@ -1,0 +1,143 @@
+public class ResultActivity extends AppCompatActivity implements View.OnClickListener{
+
+    TextView tvExam,tvQuiz,tvSw,tvHw,tvProject,tvRecitation,tvLA,tvLE,tvRaw,tvGrade,tvF,tvP;
+    Button btBack;
+
+    double[] myGrades;
+
+    DBHelper mydb;
+
+    LinearLayout layoutExam,layoutQuiz,layoutSw,layoutHw,layoutProject,layoutRec,layoutLA,layoutLE,layoutP,layoutF;
+
+    double rawScore;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_result);
+
+        setToolbar();
+
+        Intent mIntent = getIntent();
+        mydb = new DBHelper(this);
+
+
+        myGrades = mIntent.getDoubleArrayExtra("myGrades");
+
+
+
+        tvExam = (TextView)findViewById(R.id.tvExam);
+        tvQuiz = (TextView)findViewById(R.id.tvQuiz);
+        tvSw = (TextView) findViewById(R.id.tvSw);
+        tvHw = (TextView) findViewById(R.id.tvHw);
+        tvProject = (TextView) findViewById(R.id.tvProject);
+        tvRecitation= (TextView) findViewById(R.id.tvRecitation);
+        tvLA= (TextView) findViewById(R.id.tvLA);
+        tvLE= (TextView) findViewById(R.id.tvLE);
+        tvRaw = (TextView) findViewById(R.id.tvRaw);
+        tvGrade = (TextView)findViewById(R.id.tvGrade);
+        tvP = (TextView)findViewById(R.id.tvP);
+        tvF = (TextView)findViewById(R.id.tvF);
+
+
+        layoutExam = (LinearLayout)findViewById(R.id.layoutExam);
+        layoutQuiz = (LinearLayout)findViewById(R.id.layoutQuiz);
+        layoutSw = (LinearLayout)findViewById(R.id.layoutSw);
+        layoutHw = (LinearLayout)findViewById(R.id.layoutHw);
+        layoutProject = (LinearLayout)findViewById(R.id.layoutProject);
+        layoutRec = (LinearLayout)findViewById(R.id.layoutRec);
+        layoutLA = (LinearLayout)findViewById(R.id.layoutLA);
+        layoutLE = (LinearLayout)findViewById(R.id.layoutLE);
+
+        layoutP = (LinearLayout)findViewById(R.id.layoutP);
+        layoutF = (LinearLayout)findViewById(R.id.layoutF);
+
+
+        if(myGrades.length==4){
+            show(0);
+            tvP.setText(String.valueOf(myGrades[0]));
+            tvF.setText(String.valueOf(myGrades[1]));
+            tvRaw.setText(String.valueOf(myGrades[2]));
+
+            double gwa = Utility.transmute((int) myGrades[3],myGrades[2]);
+
+            tvGrade.setText(String.valueOf(gwa));
+
+
+
+        }else{
+            tvExam.setText(String.valueOf(myGrades[0]));
+            tvQuiz.setText(String.valueOf(myGrades[1]));
+            tvSw.setText(String.valueOf(myGrades[2]));
+            tvHw.setText(String.valueOf(myGrades[3]));
+            tvProject.setText(String.valueOf(myGrades[4]));
+            tvRecitation.setText(String.valueOf(myGrades[5]));
+            tvLA.setText(String.valueOf(myGrades[6]));
+            tvLE.setText(String.valueOf(myGrades[7]));
+
+            sum();
+            show(1);
+
+            tvRaw.setText(String.valueOf(rawScore));
+
+            double gwa = Utility.transmute(mydb.getPassing(mIntent.getStringExtra("subject")),rawScore);
+
+            tvGrade.setText(String.valueOf(gwa));
+
+        }
+    }
+
+
+    public void show(int x){
+        LinearLayout et[] = {layoutExam,layoutQuiz,layoutSw,layoutHw,layoutProject,layoutRec,layoutLA,layoutLE};
+        if(x==0){
+            for (LinearLayout anEt : et) {
+                anEt.setVisibility(View.GONE);
+            }
+
+        }if(x==1){
+
+            for(int i=0; i<et.length; i++){
+                if(myGrades[i] >0){
+
+                    et[i].setVisibility(View.VISIBLE);
+                }else{
+                    et[i].setVisibility(View.GONE);
+                }
+            }
+            layoutP.setVisibility(View.GONE);
+            layoutF.setVisibility(View.GONE);
+        }
+
+    }
+
+    public void sum() {
+        double result = 0;
+        for (double value:myGrades)
+            result += value;
+
+        rawScore = result;
+    }
+
+    @Override
+    public void onClick(View v) {
+        finish();
+    }
+
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setTitle("Computed Grade");
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setSubtitleTextColor(Color.WHITE);
+    }
+}

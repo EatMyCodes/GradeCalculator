@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="elpsykngroo.com.gradecalculator.ComputeGradeActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+
+    <ScrollView
+        android:id="@+id/activity_compute_grade"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+
+        android:background="@android:color/white">
+
+
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Compute Grade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView4"
+                android:textAppearance="@style/TextAppearance.AppCompat"
+                android:layout_marginBottom="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp">
+                <Spinner
+                    android:layout_width="200dp"
+                    android:id="@+id/spinner"
+                    android:textSize="20sp"
+                    android:layout_marginRight="30dp"
+                    style="@android:style/Widget.Spinner"
+                    android:layout_height="40dp"
+                    android:spinnerMode="dialog"
+                    />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Choose"
+                    android:id="@+id/btChoose"
+                    android:text="Choose"
+                    android:background="@color/blue_accent"
+                    android:textColor="@android:color/background_light"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutExam"
+                android:layout_marginBottom="10dp">
+
+                <include layout="@layout/include_exam" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etExam"
+                        android:layout_weight="1"
+                        android:layout_width="10dp" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_width="2dp"
+                        android:gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etExamOver"
+                        android:layout_weight="1"
+                        android:layout_width="10dp" />
+
+                    <Button
+                        android:text="Add Exam"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btExam"
+                        android:layout_weight="1"
+                        android:layout_width="40dp"
+                        android:background="@color/blue_accent"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
+
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:id="@+id/btHideExam"
+                    style="@style/button_show"
+                    android:text="Show exams"
+
+                    />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:id="@+id/lvExam"
+                    android:layout_height="110dp"
+                    style="@style/compute_listview" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutQuiz"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <include layout="@layout/include_quiz"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etQuiz"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView6"
+                        android:layout_weight="1"
+                        android:layout_width="2dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etQuiz2"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <Button
+                        android:text="Add quiz"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btQuiz"
+                        android:layout_weight="1"
+                        android:layout_width="50dp"
+                        android:background="@color/blue_accent"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:id="@+id/btHideQuiz"
+                    style="@style/button_show"
+                    android:text="Show quizzes"
+
+                    />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:id="@+id/lvQuiz"
+                    android:layout_height="110dp"
+                    style="@style/compute_listview" />
+
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutSw"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <include layout="@layout/include_sw"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etSw"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_width="2dp"
+                        android:layout_height="wrap_content"
+
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etSw2"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <Button
+                        android:text="Add Sw"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btSw"
+                        android:layout_weight="1"
+                        android:layout_width="50dp"
+                        android:background="@color/blue_accent"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:text="Show Seatworks"
+                    style="@style/button_show"
+                    android:id="@+id/btHideSw"
+                    />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:id="@+id/lvSw"
+                    android:layout_height="110dp"
+                    style="@style/compute_listview" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutHw"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <include layout="@layout/include_hw"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etHw"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_width="2dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etHw2"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <Button
+                        android:text="Add HW"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btHw"
+                        android:layout_weight="1"
+                        android:layout_width="50dp"
+                        android:background="@color/blue_accent"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:id="@+id/btHideHw"
+                    android:text="Show Homeworks"
+                    style="@style/button_show"
+                    />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:id="@+id/lvHw"
+                    style="@style/compute_listview" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutLA"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <include layout="@layout/include_la"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etLA"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_width="2dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etLA2"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <Button
+                        android:text="Add Lab Act"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btLA"
+                        android:layout_weight="1"
+                        android:layout_width="50dp"
+                        android:background="@color/blue_accent"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:text="Show Lab Activity"
+                    android:id="@+id/btHideLA"
+                    style="@style/button_show"
+                    />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:id="@+id/lvLA"
+                    style="@style/compute_listview" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/layoutLE"
+                android:layout_marginBottom="@dimen/activity_vertical_margin">
+
+                <include layout="@layout/include_le"/>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin">
+
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etLE"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <TextView
+                        android:text="/"
+                        android:layout_width="2dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"/>
+
+                    <EditText
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:ems="10"
+                        android:id="@+id/etLE2"
+                        android:layout_weight="1"
+                        android:layout_width="10dp"
+                        android:layout_marginBottom="10dp" />
+
+                    <Button
+                        android:text="Add Lab Exam"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/btLE"
+                        android:layout_weight="1"
+                        android:layout_width="50dp"
+                        android:background="@color/blue_accent"
+                        android:textColor="@android:color/background_light"
+                        android:layout_marginBottom="10dp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:text="Show Lab Exam"
+                    android:id="@+id/btHideLE"
+                    style="@style/button_show"
+                    />
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="110dp"
+                    android:id="@+id/lvLE"
+                    style="@style/compute_listview" />
+
+            </LinearLayout>
+
+
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/etRecitation"
+                    android:hint="Recitation"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/etProject"
+                    android:hint="Project Grade"
+                    android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/etPrelim"
+                android:hint="Prelim Grade"
+                android:layout_marginBottom="@dimen/activity_vertical_margin" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/etFinals"
+                android:hint="Finals Grade"
+                android:layout_marginBottom="@dimen/activity_vertical_margin" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:id="@+id/layoutOverall"
+                >
+                <TextView
+                    android:text="Passing Grade"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.11"
+                    android:textAppearance="@style/TextAppearance.AppCompat"
+                    android:layout_marginBottom="10dp" />
+                <Spinner
+                    android:layout_width="200dp"
+                    android:id="@+id/spPassing"
+                    android:textSize="20sp"
+                    android:layout_marginRight="30dp"
+                    android:layout_height="40dp"
+                    style="@android:style/Widget.Spinner"
+                    />
+            </LinearLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/btSubmit"
+                android:text="Compute Grade"
+                android:background="@color/blue_accent"
+                android:textColor="@android:color/background_light"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin"/>
+
+
+        </LinearLayout>
+
+
+
+
+
+    </ScrollView>
+
+
+    </LinearLayout>

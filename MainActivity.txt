@@ -1,0 +1,40 @@
+public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+
+    private Button btComGrade, btGradeSys, btDispGrade;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        btComGrade = (Button)findViewById(R.id.btComGrade);
+        btGradeSys = (Button)findViewById(R.id.btGradeSys);
+        btDispGrade = (Button)findViewById(R.id.btDispGrade);
+
+        btComGrade.setOnClickListener(this);
+        btGradeSys.setOnClickListener(this);
+        btDispGrade.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btComGrade:
+                startActivity(new Intent(this,ComputeGradeActivity.class));
+
+                break;
+
+            case R.id.btGradeSys:
+                startActivity(new Intent(this,GradingSystemTab.class));
+                break;
+
+            case R.id.btDispGrade:
+                startActivity(new Intent(this,DisplayGrade2.class));
+                break;
+
+
+        }
+
+    }
+}

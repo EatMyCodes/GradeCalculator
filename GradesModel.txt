@@ -1,0 +1,116 @@
+public class GradesModel {
+
+    private String subject;
+    private int passing;
+    private int examination;
+    private static int etExam;
+    private static int etExamOver;
+    private int quiz;
+    private int seatwork;
+    private int homework;
+    private int project;
+    private int recitation;
+    private int labAct;
+    private int labEx;
+
+    public int getHomework() {
+        return homework;
+    }
+
+    public void setHomework(int homework) {
+        this.homework = homework;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public int getPassing() {
+        return passing;
+    }
+
+    public void setPassing(int passing) {
+        this.passing = passing;
+    }
+
+    public int getQuiz() {
+        return quiz;
+    }
+
+    public void setQuiz(int quiz) {
+        this.quiz = quiz;
+    }
+
+    public int getExamination() {
+        return examination;
+    }
+
+    public void setExamination(int examination) {
+        this.examination = examination;
+    }
+
+    public static int getEtExam() {
+        return etExam;
+    }
+
+    public void setEtExam(int etExam) {
+        this.etExam = etExam;
+    }
+
+    public static int getEtExamOver() {
+        return etExamOver;
+    }
+
+    public void setEtExamOver(int etExamOver) {
+        this.etExamOver = etExamOver;
+    }
+
+    public int getSeatwork() {
+        return seatwork;
+    }
+
+    public void setSeatwork(int seatwork) {
+        this.seatwork = seatwork;
+    }
+
+    public int getProject() {
+        return project;
+    }
+
+    public void setProject(int project) {
+        this.project = project;
+    }
+
+    public int getLabAct() {
+        return labAct;
+    }
+
+    public void setLabAct(int labAct) {
+        this.labAct = labAct;
+    }
+
+    public int getRecitation() {
+        return recitation;
+    }
+
+    public void setRecitation(int recitation) {
+        this.recitation = recitation;
+    }
+
+    public int getLabEx() {
+        return labEx;
+    }
+
+    public void setLabEx(int labEx) {
+        this.labEx = labEx;
+    }
+
+
+
+
+
+}

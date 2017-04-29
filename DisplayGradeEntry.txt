@@ -1,0 +1,166 @@
+public class DisplayGradeUI extends AppCompatActivity implements View.OnClickListener {
+
+    private ArrayAdapter<String> adapterQuiz,adapterSw,adapterHw,adapterLA,adapterExam,adapterLE;;
+    ListView lvQuiz, lvSw, lvHw, lvLA, lvExam, lvLE;;
+    private TextView etProject, etRec, etPrelim, etFinals;
+    Button btBack;
+    String subjName;
+    DBHelper mydb;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_display_grade_ui);
+
+        setToolbar();
+
+        mydb = new DBHelper(this);
+
+        Intent intent = getIntent();
+        String SubjectName = intent.getStringExtra("SubjectName");
+        ArrayList arrayList = mydb.getGradeRecords(SubjectName);
+        //ArrayList
+        // array_list = mydb.getAllGrades();
+
+        etRec = (TextView) findViewById(R.id.etRecitation);
+        etProject = (TextView) findViewById(R.id.etProject);
+
+        lvQuiz = (ListView)findViewById(R.id.lvQuiz);
+        lvSw = (ListView)findViewById(R.id.lvSw);
+        lvHw = (ListView)findViewById(R.id.lvHw);
+        lvLA = (ListView)findViewById(R.id.lvLA);
+        lvExam = (ListView)findViewById(R.id.lvExam);
+        lvLE = (ListView)findViewById(R.id.lvLE);
+
+        adapterQuiz = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterSw = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterHw = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterLA = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterExam = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterLE = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+
+        lvQuiz.setAdapter(adapterQuiz);
+        lvSw.setAdapter(adapterSw);
+        lvHw.setAdapter(adapterHw);
+        lvLA.setAdapter(adapterLA);
+        lvExam.setAdapter(adapterExam);
+        lvLE.setAdapter(adapterLE);
+
+
+        distributeGrades(arrayList);
+
+    }
+
+    public void addDataEntry(String category,String score){
+        mydb.insertGradeRecord(subjName,category,score);
+    }
+
+    private void distributeGrades(ArrayList<GradeRecordsModel> arr){
+
+
+
+        for(GradeRecordsModel gModel : arr){
+            switch (gModel.getCategory()){
+
+                case "hw":
+                    adapterHw.add(gModel.getRecord());
+                    adapterHw.notifyDataSetChanged();
+                    break;
+                case "sw":
+                    adapterSw.add(gModel.getRecord());
+                    adapterSw.notifyDataSetChanged();
+                    break;
+                case "quiz":
+                    adapterQuiz.add(gModel.getRecord());
+                    adapterQuiz.notifyDataSetChanged();
+                    break;
+                case "la":
+                    adapterLA.add(gModel.getRecord());
+                    adapterLA.notifyDataSetChanged();
+                    break;
+                case "exam":
+                    adapterExam.add(gModel.getRecord());
+                    adapterExam.notifyDataSetChanged();
+                    break;
+                case "le":
+                    adapterLE.add(gModel.getRecord());
+                    adapterLE.notifyDataSetChanged();
+                    break;
+                case "recitation":
+                    etRec.setText(gModel.getRecord());
+                    break;
+                case "project":
+                    etProject.setText(gModel.getRecord());
+                    break;
+            }
+        }
+        listViewAdjust();
+    }
+
+    private void listViewAdjust(){
+        ViewGroup.LayoutParams height_quiz = lvQuiz.getLayoutParams();
+        height_quiz.height = lvQuiz.getCount()*100;
+        lvQuiz.setLayoutParams(height_quiz);
+
+        ViewGroup.LayoutParams heigt_hw = lvHw.getLayoutParams();
+        heigt_hw.height = lvHw.getCount()*100;
+        lvHw.setLayoutParams(heigt_hw);
+
+        ViewGroup.LayoutParams height_sw = lvSw.getLayoutParams();
+        height_sw.height = lvSw.getCount()*100;
+        lvSw.setLayoutParams(height_sw);
+
+        ViewGroup.LayoutParams height_la = lvLA.getLayoutParams();
+        height_la.height = lvLA.getCount()*100;
+        lvLA.setLayoutParams(height_la);
+
+        ViewGroup.LayoutParams height_exam = lvExam.getLayoutParams();
+        height_exam.height = lvExam.getCount()*100;
+        lvExam.setLayoutParams(height_exam);
+
+        ViewGroup.LayoutParams height_le = lvLE.getLayoutParams();
+        height_le.height = lvLE.getCount()*100;
+        lvLE.setLayoutParams(height_le);
+
+    }
+
+    @Override
+    protected void onPause(){
+
+        if(!etRec.getText().toString().equals("")){
+            String recGrade = etRec.getText().toString();
+            if(Double.parseDouble(recGrade)<=100) {
+                addDataEntry("recitation", etRec.getText().toString());
+            }
+        }
+        if(!etProject.getText().toString().equals("")){
+            String projGrade = etProject.getText().toString();
+            if(Double.parseDouble(projGrade)<=100) {
+                addDataEntry("project", etProject.getText().toString());
+            }
+        }
+
+        super.onPause();
+    }
+
+    public void onClick(View v) {
+        finish();
+    }
+
+    private void setToolbar() {
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        getSupportActionBar().setTitle("My Grades");
+        toolbar.setTitleTextColor(Color.WHITE);
+        toolbar.setSubtitleTextColor(Color.WHITE);
+    }
+}

@@ -1,0 +1,268 @@
+public class FragmentImportExport extends Fragment implements View.OnClickListener{
+
+    private OnFragmentInteractionListener mListener;
+    Button btImport,btExport;
+    public final int FILE_SELECT_CODE = 1234;
+    DBHelper mydb;
+    AlertDialog alert;
+
+    public FragmentImportExport() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_import_export, container, false);
+
+        btImport = (Button)rootView.findViewById(R.id.btImport);
+        btExport = (Button)rootView.findViewById(R.id.btExport);
+
+        btImport.setOnClickListener(this);
+        btExport.setOnClickListener(this);
+
+        return rootView;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+            mydb = new DBHelper(getContext());
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+    @Override
+    public void onClick(final View v) {
+        switch (v.getId()){
+            case R.id.btImport:{
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                //intent.setType("*/*");      //all files
+                intent.setType("text/txt");   //XML file only
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+                try {
+                    startActivityForResult(Intent.createChooser(intent, "Select a File to Upload"), FILE_SELECT_CODE);
+                } catch (android.content.ActivityNotFoundException ex) {
+                    // Potentially direct the user to the Market with a Dialog
+                    Toast.makeText(getContext(), "Please install a File Manager.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+            case R.id.btExport:{
+
+
+                ArrayList<String> allGrades = mydb.getAllGrades();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View layout = LayoutInflater.from(getActivity()).inflate(R.layout.popup_all_grades,null);
+
+                final ListView lvListGrades = (ListView)layout.findViewById(R.id.lvListGrades);
+                ArrayAdapter arr = new ArrayAdapter(getContext(),android.R.layout.simple_list_item_1,allGrades);
+                lvListGrades.setAdapter(arr);
+                lvListGrades.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Toast.makeText(getContext(), lvListGrades.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                        try {
+                            String subj = lvListGrades.getItemAtPosition(position).toString();
+                            String json = exportGrade(subj);
+                            generateNoteOnSD(getContext(),subj,json);
+                        } catch (JSONException e) {
+                            Toast.makeText(getContext(), "JSONEXCEPTION", Toast.LENGTH_SHORT).show();
+                            e.printStackTrace();
+                        }
+                        alert.dismiss();
+                    }
+                });
+                builder.setView(layout);
+                alert = builder.create();
+                alert.show();
+                break;
+            }
+
+        }
+
+    }
+
+    /**
+     * This interface must be implemented by activities that contain this
+     * fragment to allow an interaction in this fragment to be communicated
+     * to the activity and potentially other fragments contained in that
+     * activity.
+     * <p>
+     * See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html"
+     * >Communicating with Other Fragments</a> for more information.
+     */
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case FILE_SELECT_CODE:
+                if (resultCode == RESULT_OK) {
+
+                    final Uri uri = data.getData();
+
+                    //File file = new File(uri.getPath());
+                    try{
+                        String contents = ReadFile(uri.getPath());
+                        GradesModel gradesModel = importGrade(contents);
+                        if(insertToDb(gradesModel)){
+                            Toast.makeText(getContext(), "Grade Successfully Imported", Toast.LENGTH_SHORT).show();
+                            refresh();
+                        }else{
+                            Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }catch (IOException e){
+                        Toast.makeText(getContext(), "IOEXCEPTION", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }catch (JSONException e){
+                        Toast.makeText(getContext(), "JSONEXCEPTION", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }catch (Exception e){
+                        Toast.makeText(getContext(), e.toString(), Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+
+
+
+                }
+                break;
+        }
+    }
+
+    private String ReadFile(String path) throws IOException{
+
+
+
+            File file = new File(path);
+            BufferedReader br = new BufferedReader(new FileReader(file));
+
+            StringBuilder text = new StringBuilder();
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+                System.out.print("DATA: "+br.readLine());
+            }
+
+            br.close();
+            return text.toString();
+            //System.out.println("THIS IS: "+line);
+
+
+    }
+
+
+    private GradesModel importGrade(String grades) throws JSONException{
+
+        GradesModel gModel = new GradesModel();
+
+        JSONObject JO = new JSONObject(grades);
+        gModel.setSubject(JO.getString(DBHelper.GRADE_SUBJECT_NAME));
+        gModel.setPassing(JO.getInt(DBHelper.GRADE_PASSING));
+        gModel.setExamination(JO.getInt(DBHelper.GRADE_EXAMINATION));
+        gModel.setQuiz(JO.getInt(DBHelper.GRADE_QUIZ));
+        gModel.setSeatwork(JO.getInt(DBHelper.GRADE_SEATWORK));
+        gModel.setHomework(JO.getInt(DBHelper.GRADE_HOMEWORK));
+        gModel.setProject(JO.getInt(DBHelper.GRADE_PROJECT));
+        gModel.setRecitation(JO.getInt(DBHelper.GRADE_RECITATION));
+        gModel.setLabAct(JO.getInt(DBHelper.GRADE_LABACT));
+        gModel.setLabEx(JO.getInt(DBHelper.GRADE_LABEX));
+
+        return gModel;
+
+    }
+
+    private boolean insertToDb(GradesModel gradesModel){
+
+        if(mydb.insertContact(gradesModel.getSubject(),gradesModel.getPassing(),gradesModel.getExamination(),
+                gradesModel.getQuiz(),gradesModel.getSeatwork(),gradesModel.getHomework(),gradesModel.getProject(),
+                gradesModel.getRecitation(),gradesModel.getLabAct(),gradesModel.getLabEx())){
+
+            return true;
+        }
+        return false;
+    }
+
+    private String exportGrade(String subj) throws JSONException{
+        GradesModel gmodel = mydb.getSubjGrade(subj);
+
+        JSONObject JO = new JSONObject();
+        JO.put(DBHelper.GRADE_SUBJECT_NAME,gmodel.getSubject());
+        JO.put(DBHelper.GRADE_PASSING,gmodel.getPassing());
+        JO.put(DBHelper.GRADE_EXAMINATION,gmodel.getExamination());
+        JO.put(DBHelper.GRADE_QUIZ,gmodel.getQuiz());
+        JO.put(DBHelper.GRADE_SEATWORK,gmodel.getSeatwork());
+        JO.put(DBHelper.GRADE_HOMEWORK,gmodel.getHomework());
+        JO.put(DBHelper.GRADE_PROJECT,gmodel.getProject());
+        JO.put(DBHelper.GRADE_RECITATION,gmodel.getRecitation());
+        JO.put(DBHelper.GRADE_LABACT,gmodel.getLabAct());
+        JO.put(DBHelper.GRADE_LABEX,gmodel.getLabEx());
+
+        return JO.toString();
+
+    }
+
+    public void generateNoteOnSD(Context context, String sFileName, String sBody) {
+        try {
+            File root = new File(Environment.getExternalStorageDirectory(), "Grade_Calculator");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            File gpxfile = new File(root, sFileName+".txt");
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(sBody);
+            writer.flush();
+            writer.close();
+            new SweetAlertDialog(getContext(), SweetAlertDialog.SUCCESS_TYPE)
+                    .setTitleText("Success")
+                    .setContentText("File saved in \n "+ gpxfile.getAbsolutePath())
+                    .setConfirmText("Ok")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            refresh();
+                        }
+                    })
+                    .show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void refresh(){
+        startActivity(new Intent(getContext(),GradingSystemTab.class));
+        getActivity().overridePendingTransition(0, 0);
+        getActivity().finish();
+    }
+}

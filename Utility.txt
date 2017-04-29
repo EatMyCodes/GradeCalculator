@@ -1,0 +1,185 @@
+public class Utility {
+
+    public static double sum(ArrayList<Double> list){
+        if(list==null || list.size()<1)
+            return 0;
+
+        double sum = 0;
+        for(Double i: list)
+            sum = sum+i;
+
+        return sum;
+    }
+
+    public static double[] copyFromIntArray(int[] source) {
+        double[] dest = new double[source.length];
+        for(int i=0; i<source.length; i++) {
+            dest[i] = source[i];
+        }
+        return dest;
+    }
+
+    public static double transmute(int passingRate, double rawGrade){
+
+        double transmutedGrade=0.00;
+
+        switch(passingRate){
+            case 40:
+                if (92.8000 <= rawGrade && rawGrade <= 100.00){
+                    transmutedGrade=1.00;
+                }else if (85.6000 <= rawGrade && rawGrade <= 92.7999){
+                    transmutedGrade=1.25;
+                }else if (78.4000 <= rawGrade && rawGrade <= 85.5999){
+                    transmutedGrade=1.50;
+                }else if (71.2000 <= rawGrade && rawGrade <= 78.3999){
+                    transmutedGrade=1.75;
+                }else if (64.0000 <= rawGrade && rawGrade <= 71.1999){
+                    transmutedGrade=2.00;
+                }else if (56.8000 <= rawGrade && rawGrade <= 63.9999){
+                    transmutedGrade=2.25;
+                }else if (49.6000 <= rawGrade && rawGrade <= 56.7999){
+                    transmutedGrade=2.50;
+                }else if (42.4000 <= rawGrade && rawGrade <= 49.5999){
+                    transmutedGrade=2.75;
+                }else if (40.0000 <= rawGrade && rawGrade <= 42.3999){
+                    transmutedGrade=3.00;
+                }else if (rawGrade < 40.000){
+                    transmutedGrade=5.00;
+                }
+                break;
+
+            case 50:
+                if (94.0000 <= rawGrade && rawGrade <= 100.00){
+                    transmutedGrade=1.00;
+                }else if (88.0000 <= rawGrade && rawGrade <= 93.9999){
+                    transmutedGrade=1.25;
+                }else if (82.0000 <= rawGrade && rawGrade <= 87.9999){
+                    transmutedGrade=1.50;
+                }else if (76.0000 <= rawGrade && rawGrade <= 81.9999){
+                    transmutedGrade=1.75;
+                }else if (70.0000 <= rawGrade && rawGrade <= 75.9999){
+                    transmutedGrade=2.00;
+                }else if (64.0000 <= rawGrade && rawGrade <= 69.9999){
+                    transmutedGrade=2.25;
+                }else if (58.0000 <= rawGrade && rawGrade <= 63.9999){
+                    transmutedGrade=2.50;
+                }else if (52.0000 <= rawGrade && rawGrade <= 57.9999){
+                    transmutedGrade=2.75;
+                }else if (50.0000 <= rawGrade && rawGrade <= 51.9999){
+                    transmutedGrade=3.00;
+                }else if (rawGrade < 50.000){
+                    transmutedGrade=5.00;
+                }
+                break;
+
+            case 60:
+                if (95.2000 <= rawGrade && rawGrade <= 100.00){
+                    transmutedGrade=1.00;
+                }else if (90.4000 <= rawGrade && rawGrade <= 95.1999){
+                    transmutedGrade=1.25;
+                }else if (85.6000 <= rawGrade && rawGrade <= 90.3999){
+                    transmutedGrade=1.50;
+                }else if (80.8000 <= rawGrade && rawGrade <= 85.5999){
+                    transmutedGrade=1.75;
+                }else if (76.0000 <= rawGrade && rawGrade <= 80.7999){
+                    transmutedGrade=2.00;
+                }else if (71.2000 <= rawGrade && rawGrade <= 75.9999){
+                    transmutedGrade=2.25;
+                }else if (66.4000 <= rawGrade && rawGrade <= 71.1999){
+                    transmutedGrade=2.50;
+                }else if (61.6000 <= rawGrade && rawGrade <= 66.3999){
+                    transmutedGrade=2.75;
+                }else if (60.0000 <= rawGrade && rawGrade <= 61.5999){
+                    transmutedGrade=3.00;
+                }else if (rawGrade < 60.000){
+                    transmutedGrade=5.00;
+                }
+                break;
+
+            case 65:
+                if (95.8000 <= rawGrade && rawGrade <= 100.00){
+                    transmutedGrade=1.00;
+                }else if (91.6000 <= rawGrade && rawGrade <= 95.7999){
+                    transmutedGrade=1.25;
+                }else if (87.4000 <= rawGrade && rawGrade <= 91.5999){
+                    transmutedGrade=1.50;
+                }else if (83.2000 <= rawGrade && rawGrade <= 87.3999){
+                    transmutedGrade=1.75;
+                }else if (79.0000 <= rawGrade && rawGrade <= 83.1999){
+                    transmutedGrade=2.00;
+                }else if (74.8000 <= rawGrade && rawGrade <= 78.9999){
+                    transmutedGrade=2.25;
+                }else if (70.6000 <= rawGrade && rawGrade <= 74.7999){
+                    transmutedGrade=2.50;
+                }else if (66.4000 <= rawGrade && rawGrade <= 70.5999){
+                    transmutedGrade=2.75;
+                }else if (65.0000 <= rawGrade && rawGrade <= 66.3999){
+                    transmutedGrade=3.00;
+                }else if (rawGrade < 65.000){
+                    transmutedGrade=5.00;
+                }
+                break;
+
+            case 70:
+                if (96.4000 <= rawGrade && rawGrade <= 100.00){
+                    transmutedGrade=1.00;
+                }else if (92.8000 <= rawGrade && rawGrade <= 96.3999){
+                    transmutedGrade=1.25;
+                }else if (89.2000 <= rawGrade && rawGrade <= 92.7999){
+                    transmutedGrade=1.50;
+                }else if (85.6000 <= rawGrade && rawGrade <= 89.1999){
+                    transmutedGrade=1.75;
+                }else if (82.0000 <= rawGrade && rawGrade <= 85.5999){
+                    transmutedGrade=2.00;
+                }else if (78.4000 <= rawGrade && rawGrade <= 81.9999){
+                    transmutedGrade=2.25;
+                }else if (74.8000 <= rawGrade && rawGrade <= 78.3999){
+                    transmutedGrade=2.50;
+                }else if (71.2000 <= rawGrade && rawGrade <= 74.7999){
+                    transmutedGrade=2.75;
+                }else if (70.0000 <= rawGrade && rawGrade <= 71.1999){
+                    transmutedGrade=3.00;
+                }else if (rawGrade < 70.000){
+                    transmutedGrade=5.00;
+                }
+                break;
+
+            case 75:
+                if (97.0000 <= rawGrade && rawGrade <= 100.00){
+                    transmutedGrade=1.00;
+                }else if (94.0000 <= rawGrade && rawGrade <= 96.9999){
+                    transmutedGrade=1.25;
+                }else if (91.0000 <= rawGrade && rawGrade <= 93.9999){
+                    transmutedGrade=1.50;
+                }else if (88.0000 <= rawGrade && rawGrade <= 90.9999){
+                    transmutedGrade=1.75;
+                }else if (85.0000 <= rawGrade && rawGrade <= 87.9999){
+                    transmutedGrade=2.00;
+                }else if (82.0000 <= rawGrade && rawGrade <= 84.9999){
+                    transmutedGrade=2.25;
+                }else if (79.0000 <= rawGrade && rawGrade <= 81.9999){
+                    transmutedGrade=2.50;
+                }else if (76.0000 <= rawGrade && rawGrade <= 78.9999){
+                    transmutedGrade=2.75;
+                }else if (75.0000 <= rawGrade && rawGrade <= 75.9999){
+                    transmutedGrade=3.00;
+                }else if (rawGrade < 75.000){
+                    transmutedGrade=5.00;
+                }
+                break;
+
+            case 80:
+                break;
+
+            default:
+                System.out.println("ERROR");
+                break;
+        }
+
+        System.out.println(transmutedGrade);
+
+
+
+        return transmutedGrade;
+    }
+}

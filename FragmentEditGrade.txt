@@ -1,0 +1,153 @@
+public class FragmentEditGrade extends Fragment {
+
+
+    DBHelper mydb;
+    ArrayList arrayList;
+    ListView lvEdit;
+    AlertDialog alert;
+
+
+
+    public FragmentEditGrade() {
+        // Required empty public constructor
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+
+        mydb = new DBHelper(getActivity());
+        arrayList = mydb.getAllGrades();
+
+        final ArrayAdapter arrayAdapter=new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1, arrayList);
+
+
+        View rootView = inflater.inflate(R.layout.fragment_edit_grade, container, false);
+        lvEdit = (ListView)rootView.findViewById(R.id.lvEdit);
+        lvEdit.invalidateViews();
+        arrayAdapter.notifyDataSetChanged();
+        lvEdit.setAdapter(arrayAdapter);
+        lvEdit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(final AdapterView<?> parent, View view, final int position, long id) {
+
+                ArrayList<Integer> arr_list = new ArrayList<>();
+                arr_list.add(50);arr_list.add(60);arr_list.add(70);arr_list.add(80);
+                ArrayAdapter arr = new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item, arr_list);
+
+                int myGrade[] = mydb.getGrade((String)parent.getItemAtPosition(position));
+                int passing = mydb.getPassing((String)parent.getItemAtPosition(position));
+
+
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View layout = LayoutInflater.from(getActivity()).inflate(R.layout.popup_edit,null);
+
+                final Spinner spPassing;
+                final EditText etExam,etQuiz,etSw,etHw,etProj,etRec,etLA,etLE;
+
+                spPassing = (Spinner)layout.findViewById(R.id.spPassing);
+                spPassing.setAdapter(arr);
+                spPassing.setSelection(arr_list.indexOf(passing));
+
+
+                (etExam = (EditText)layout.findViewById(R.id.etExam)).setText(String.valueOf(myGrade[0]));
+                (etQuiz = (EditText)layout.findViewById(R.id.etQuiz)).setText(String.valueOf(myGrade[1]));
+                (etSw = (EditText)layout.findViewById(R.id.etSw)).setText(String.valueOf(myGrade[2]));
+                (etHw = (EditText)layout.findViewById(R.id.etHw)).setText(String.valueOf(myGrade[3]));
+                (etProj = (EditText)layout.findViewById(R.id.etProj)).setText(String.valueOf(myGrade[4]));
+                (etRec = (EditText)layout.findViewById(R.id.etRec)).setText(String.valueOf(myGrade[5]));
+                (etLA = (EditText)layout.findViewById(R.id.etLA)).setText(String.valueOf(myGrade[6]));
+                (etLE = (EditText)layout.findViewById(R.id.etLE)).setText(String.valueOf(myGrade[7]));
+
+
+
+
+                builder.setView(layout)
+                        .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String subj = (String)parent.getItemAtPosition(position);
+                                int passing = Integer.parseInt(spPassing.getSelectedItem().toString());
+                                int exam = Integer.parseInt(etExam.getText().toString());
+                                int quiz = Integer.parseInt(etQuiz.getText().toString());
+                                int sw = Integer.parseInt(etSw.getText().toString());
+                                int hw = Integer.parseInt(etHw.getText().toString());
+                                int proj = Integer.parseInt(etProj.getText().toString());
+                                int rec = Integer.parseInt(etRec.getText().toString());
+                                int la = Integer.parseInt(etLA.getText().toString());
+                                int le = Integer.parseInt(etLE.getText().toString());
+
+                                if((exam+quiz+sw+hw+proj+rec+la+le) == 100){
+                                    if(mydb.updateGrade(subj,passing,exam,quiz,sw,hw,proj,rec,la,le)){
+                                        Toast.makeText(getActivity(), subj + " Updated", Toast.LENGTH_SHORT).show();
+                                        startActivity(new Intent(getContext(),GradingSystemTab.class));
+                                        getActivity().overridePendingTransition(0, 0);
+                                        getActivity().finish();
+                                    }else{
+                                        Toast.makeText(getActivity(), subj + " Not Updated", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Breakdown must be 100", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                //Nagleleak
+                alert = builder.create();
+                alert.show();
+            }
+        });
+
+        return rootView;
+    }
+
+
+
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mydb = null;
+        arrayList = null;
+        lvEdit.invalidateViews();
+    }
+
+
+
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mydb = new DBHelper(getContext());
+        arrayList = mydb.getAllGrades();
+    }
+
+
+
+
+
+
+
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+
+
+
+}

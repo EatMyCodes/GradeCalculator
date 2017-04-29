@@ -1,0 +1,144 @@
+public class FragmentCreateGrade extends Fragment{
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+
+    private String mParam1;
+    private String mParam2;
+
+    private OnFragmentInteractionListener mListener;
+
+    public FragmentCreateGrade() {
+
+    }
+
+
+
+    public static FragmentCreateGrade newInstance(String param1, String param2) {
+        FragmentCreateGrade fragment = new FragmentCreateGrade();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_create_grade, container, false);
+        final EditText etSubject,etExamination,etQuiz,etSeatwork,etHomework,etProject,etRecitation,etLabAct,etLabEx;
+        Button btCreateGrade;
+
+        final Spinner spPassing = (Spinner)rootView.findViewById(R.id.spPassing);
+        ArrayList<Integer> arr = new ArrayList<>();
+        arr.add(50);arr.add(60);arr.add(70);arr.add(80);
+        ArrayAdapter arrayAdapter=new ArrayAdapter(getActivity(),android.R.layout.simple_spinner_item, arr);
+        spPassing.setAdapter(arrayAdapter);
+
+
+        etSubject = (EditText)rootView.findViewById(R.id.etSubject);
+        etExamination = (EditText)rootView.findViewById(R.id.etExamination);
+        etQuiz = (EditText)rootView.findViewById(R.id.etQuiz);
+        etSeatwork = (EditText)rootView.findViewById(R.id.etSeatwork);
+        etHomework = (EditText)rootView.findViewById(R.id.etHomework);
+        etProject = (EditText)rootView.findViewById(R.id.etProject);
+        etRecitation = (EditText)rootView.findViewById(R.id.etRecitation);
+        etLabAct = (EditText)rootView.findViewById(R.id.etLabAct);
+        etLabEx = (EditText)rootView.findViewById(R.id.etLabEx);
+
+
+
+
+        btCreateGrade = (Button)rootView.findViewById(R.id.btCreateGrade);
+        btCreateGrade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+
+                    String subject = etSubject.getText().toString();
+                    int passing = Integer.parseInt(spPassing.getSelectedItem().toString());
+                    int examination = Integer.parseInt("0" + etExamination.getText().toString());
+                    int quiz = Integer.parseInt("0" +etQuiz.getText().toString());
+                    int seatwork = Integer.parseInt("0" +etSeatwork.getText().toString());
+                    int homework = Integer.parseInt("0" +etHomework.getText().toString());
+                    int project = Integer.parseInt("0" +etProject.getText().toString());
+                    int recitation = Integer.parseInt("0" +etRecitation.getText().toString());
+                    int labAct = Integer.parseInt("0" +etLabAct.getText().toString());
+                    int labEx = Integer.parseInt("0" +etLabEx.getText().toString());
+
+
+                    DBHelper myDb = new DBHelper(getActivity());
+
+                    if(!subject.equals("")){
+                        if((examination+quiz+seatwork+homework+project+recitation+labAct+labEx) == 100) {
+                            if (myDb.insertContact(subject, passing, examination, quiz, seatwork, homework, project, recitation, labAct, labEx)) {
+                                Toast.makeText(getActivity(), "Grading System Created", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(getContext(),GradingSystemTab.class));
+                                getActivity().overridePendingTransition(0, 0);
+                                getActivity().finish();
+                            } else {
+                                Toast.makeText(getActivity(), "Grading System NOT Created", Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(getActivity(), "Breakdown must be 100", Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(getActivity(), "Please Enter a Subject Name", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+                catch (Exception e){
+                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        return rootView;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
+
+
+}
